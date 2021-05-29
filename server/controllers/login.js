@@ -26,17 +26,31 @@ async function login(req, res) {
 
     const user = await User.findOne({ email });
 
-    if (!user) return res.status(400).json({ message: 'invalid email or password' });
+    if (!user) return res.status(401).json({ message: 'invalid email or password' });
 
     const isPasswordValid = await validatePassword(password, user.password);
 
-    if (!isPasswordValid) return res.status(400).json({ message: 'invalid email or password' });
+    if (!isPasswordValid) return res.status(401).json({ message: 'invalid email or password' });
 
     // SUCCESS! Write user to session and write 200 response
     // create a user session - or add to session if already exists
     req.session.user = user._id;
-    res.json({ user });
+    res.json({ email: user.email });
+}
+
+function logout(req, res) {
+    req.session.user = undefined;
+    res.end();
+}
+
+async function profile(req, res) {
+    const { user } = req.session;
+    const userDB = await User.findById(user);
+
+    if (!userDB) return res.status(401).end();
+
+    res.json({ email: userDB.email });
 }
 
 // TODO: Bulk handle rejected promises here
-module.exports = { register, login };
+module.exports = { register, login, logout, profile };

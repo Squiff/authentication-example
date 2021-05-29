@@ -36,11 +36,17 @@ function isAuthenticated(req, res, next) {
 
 // Middlewares
 app.use(express.json());
+app.use((req, res, next) => {
+    console.log(req.method, req.url);
+    if (req.body) console.log(req.body);
+    if (req.headers['cookie']) console.log(req.headers['cookie']);
+    next();
+});
 
 // Routes
-app.use('/', login);
+app.use('/api', login);
 
-app.use('/protected', isAuthenticated, (req, res) => {
+app.use('/api/protected', isAuthenticated, (req, res) => {
     res.json({ message: 'successfully accessed protected route' });
 });
 
