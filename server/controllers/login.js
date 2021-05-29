@@ -1,24 +1,22 @@
 const { hashPassword, validatePassword } = require('../utils/password');
 const User = require('../models/User');
 
-// TODO: Add password requirements
 async function register(req, res) {
     const password = await hashPassword(req.body.password);
     const email = req.body.email;
 
-    // does user exist
-    const u = await User.findOne({ email });
+    // check if user already exists
+    const userCheck = await User.findOne({ email });
+    if (userCheck) return res.status(400).json({ message: 'User Already Exists' });
 
-    if (u) return res.status(400).json({ message: 'User Already Exists' });
-
+    // create user record
     const newUser = new User({
         email: req.body.email,
         password: password,
     });
 
-    await newUser.save();
-
-    res.json({ success: true });
+    const savedUser = await newUser.save();
+    res.json({ email: savedUser.email });
 }
 
 async function login(req, res) {

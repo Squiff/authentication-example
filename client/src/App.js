@@ -1,21 +1,24 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import { AuthContextProvider } from './context/auth/context';
+import Navbar from './components/Navbar';
+import Register from './pages/Register';
 
 function app() {
     return (
         <AuthContextProvider>
             <Router>
-                <Link to="/">Home</Link>
-                <Link to="/login">Login</Link>
-                <Link to="/profile">Profile</Link>
+                <Navbar>sdgfdfzg</Navbar>
                 <Switch>
                     <Route path="/login">
                         <Login />
+                    </Route>
+                    <Route path="/register">
+                        <Register />
                     </Route>
                     <ProtectedRoute path="/profile">
                         <Profile />

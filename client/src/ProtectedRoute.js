@@ -3,7 +3,7 @@ import { Redirect, Route, useLocation } from 'react-router';
 import { useAuth, useIsAuthenticated } from './context/auth/hooks';
 
 function ProtectedRoute({ children, ...props }) {
-    const [state, dispatch] = useAuth();
+    const [state] = useAuth();
     const isAuth = useIsAuthenticated();
     const location = useLocation();
 

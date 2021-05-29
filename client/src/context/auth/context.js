@@ -23,7 +23,8 @@ export function AuthContextProvider({ children }) {
                 dispatch(login(data));
             } catch (error) {
                 if (error.response && error.response.status === 401) {
-                    return dispatch(login({})); // not authenticated - set empty user
+                    // not authenticated - set empty user
+                    return dispatch(login({}));
                 }
 
                 dispatch(error(error.message));
