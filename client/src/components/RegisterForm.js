@@ -3,6 +3,7 @@ import { useAuth } from '../context/auth/hooks';
 import { login, logout } from '../context/auth/actions';
 import { useHistory, useLocation } from 'react-router';
 import * as API from '../api/api';
+import { validatePassword, validateEmail } from '../utils/utils';
 
 const initialState = {
     email: '',
@@ -22,13 +23,10 @@ function RegisterForm() {
     async function handleSubmit(e) {
         e.preventDefault();
 
-        // do nothing if request in flight
         if (loading) return;
-        if (!formState.email) return setFormError('Email Required');
-        if (!formState.password) return setFormError('Password Required');
-        if (!formState.confirmpassword) return setFormError('Please confirm password');
-        if (formState.password !== formState.confirmpassword)
-            return setFormError('Passwords do not match');
+
+        const validationMsg = validateForm(formState);
+        if (validationMsg) return setFormError(validationMsg);
 
         setFormError(''); // remove any previous fetch errors
 
@@ -66,7 +64,7 @@ function RegisterForm() {
     return (
         <div className="loginform__card">
             <h6 className="loginform__header">Sign Up</h6>
-            <div className="loginform__errortext">{formError && <div>{formError}</div>}</div>
+            {formError && <div className="loginform__errortext">{formError}</div>}
             <form onSubmit={handleSubmit}>
                 <label htmlFor="registeremail" className="loginform__label">
                     Email
@@ -107,6 +105,19 @@ function RegisterForm() {
             </form>
         </div>
     );
+}
+
+/** return a single validation message, or null if all fields are valid */
+function validateForm(formState) {
+    if (!validateEmail(formState.email)) return 'Invalid Email';
+    if (!formState.password) return 'Password Required';
+    if (!formState.confirmpassword) return 'Please confirm password';
+    if (formState.password !== formState.confirmpassword) return 'Passwords do not match';
+
+    const passwordValidation = validatePassword(formState.password);
+    if (passwordValidation) return passwordValidation;
+
+    return null;
 }
 
 function redirectedFrom(location, defaultLocation) {

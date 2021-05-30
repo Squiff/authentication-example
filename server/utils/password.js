@@ -9,11 +9,11 @@ async function hashPassword(password) {
     return await bcrypt.hash(password, saltRounds);
 }
 
-async function validatePassword(submittedPassword, hash) {
+async function comparePassword(submittedPassword, hash) {
     return await bcrypt.compare(submittedPassword, hash);
 }
 
 module.exports = {
     hashPassword,
-    validatePassword,
+    comparePassword,
 };

@@ -1,22 +1,37 @@
-const { hashPassword, validatePassword } = require('../utils/password');
+const { hashPassword, comparePassword } = require('../utils/password');
 const User = require('../models/User');
+const { validateEmail, validatePassword } = require('../utils/validation');
 
-async function register(req, res) {
-    const password = await hashPassword(req.body.password);
-    const email = req.body.email;
+// validate email: front end and backend
+// validate password: front end and back end
+async function register(req, res, next) {
+    const email = req.body?.email;
+    const password = req.body?.password;
 
-    // check if user already exists
+    // check email and password
+    if (validateEmail(email) === false)
+        return res.status(400).json({ message: 'Invalid Email Address' });
+    if (validatePassword(password) === false)
+        return res.status(400).json({ message: 'Password requirements not met' });
+
+    // check if user already exists (may choose not to expose this and send a generic response)
     const userCheck = await User.findOne({ email });
     if (userCheck) return res.status(400).json({ message: 'User Already Exists' });
 
-    // create user record
-    const newUser = new User({
-        email: req.body.email,
-        password: password,
-    });
+    const hashedPassword = await hashPassword(password);
 
-    const savedUser = await newUser.save();
-    res.json({ email: savedUser.email });
+    // create user record
+    try {
+        const newUser = new User({
+            email: req.body.email,
+            password: hashedPassword,
+        });
+
+        const savedUser = await newUser.save();
+        res.json({ email: savedUser.email });
+    } catch (error) {
+        next(error); // pass to default error handler
+    }
 }
 
 async function login(req, res) {
@@ -26,19 +41,18 @@ async function login(req, res) {
 
     if (!user) return res.status(401).json({ message: 'invalid email or password' });
 
-    const isPasswordValid = await validatePassword(password, user.password);
+    const isPasswordValid = await comparePassword(password, user.password);
 
     if (!isPasswordValid) return res.status(401).json({ message: 'invalid email or password' });
 
-    // SUCCESS! Write user to session and write 200 response
-    // create a user session - or add to session if already exists
+    // SUCCESS! add user session.
     req.session.user = user._id;
     res.json({ email: user.email });
 }
 
 function logout(req, res) {
     req.session.user = undefined;
-    res.end();
+    res.json({ success: true });
 }
 
 async function profile(req, res) {
