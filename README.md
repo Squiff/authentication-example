@@ -2,15 +2,18 @@
 
 A simple demo of username and password authentication.
 
-**DB**: MongoDB
+Set Environment variables in server/.env
 
-**Client**: create react app
+### DB (MongoDB)
 
-**server**: node/express
+Set connection string in .env file
 
-## Startup
+### Client (create react app)
 
-<hr/>
-set environment variables
-cd server -> npm start
 cd client -> npm start
+
+### server (node/express)
+
+set PORT and SESSION_SECRET in .env
+
+cd server -> npm start
