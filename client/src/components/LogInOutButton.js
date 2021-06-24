@@ -5,7 +5,7 @@ import { logout } from '../context/auth/actions';
 import * as API from '../api/api';
 
 function LogInOutButton() {
-    const [state, dispatch] = useAuth();
+    const [_, dispatch] = useAuth();
     const isAuth = useIsAuthenticated();
 
     if (!isAuth) {

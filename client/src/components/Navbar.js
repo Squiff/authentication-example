@@ -7,12 +7,18 @@ function Navbar({ children }) {
     return (
         <div className="navbar">
             <nav className="navbar__nav">
-                <div className="navbar__navitem">
-                    <Link to="/">Home</Link>
-                </div>
-                <div className="navbar__navitem">
-                    <Link to="/profile">Profile</Link>
-                </div>
+                <ul className="navbar__navlist">
+                    <li>
+                        <Link to="/" className="navbar__navitem">
+                            Home
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/profile" className="navbar__navitem">
+                            Profile
+                        </Link>
+                    </li>
+                </ul>
             </nav>
             <LogInOutButton />
         </div>

@@ -10,9 +10,14 @@
         0px 1px 8px 0px rgba(0, 0, 0, 0.12);
 
     &__nav {
+        margin: auto;
+    }
+
+    &__navlist {
         list-style-type: none;
         display: flex;
         align-items: stretch;
+        padding: 0;
         margin: auto;
     }
 
