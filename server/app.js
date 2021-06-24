@@ -26,7 +26,7 @@ const session = expressSession({
 
 app.use(session);
 
-// TEST
+// Authentication middleware
 function isAuthenticated(req, res, next) {
     const { user } = req.session;
     if (!user) return res.status(401).json({ message: 'login required' });
@@ -36,12 +36,13 @@ function isAuthenticated(req, res, next) {
 
 // Middlewares
 app.use(express.json());
-app.use((req, res, next) => {
-    console.log(req.method, req.url);
-    if (req.body) console.log(req.body);
-    if (req.headers['cookie']) console.log(req.headers['cookie']);
-    next();
-});
+
+// app.use((req, res, next) => {
+//     console.log(req.method, req.url);
+//     if (req.body) console.log(req.body);
+//     // if (req.headers['cookie']) console.log(req.headers['cookie']);
+//     next();
+// });
 
 // Routes
 app.use('/api', login);

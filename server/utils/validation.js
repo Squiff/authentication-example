@@ -1,4 +1,3 @@
-/** Basic validation test for _@_._ format */
 function validateEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
 }
