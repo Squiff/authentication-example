@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useReducer } from 'react';
 import { authReducer } from './reducer';
 import { profile } from '../../api/api';
-import { login, error } from './actions';
+import { login, setError } from './actions';
 
 export const AuthContext = createContext();
 
@@ -27,7 +27,7 @@ export function AuthContextProvider({ children }) {
                     return dispatch(login({}));
                 }
 
-                dispatch(error(error.message));
+                dispatch(setError(error.message));
             }
         };
 

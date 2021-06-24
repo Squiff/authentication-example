@@ -8,6 +8,6 @@ export function logout() {
     return { type: ACTIONS.logout };
 }
 
-export function error(msg) {
+export function setError(msg) {
     return { type: ACTIONS.error, payload: msg };
 }
